@@ -39,7 +39,6 @@ extension MainRouter {
     switch view {
     case .noInternet(let action):
       NoInternetView.init(action: action)
-//      Rectangle().fill(Color.purple)
     default:
       EmptyView()
     }
