@@ -14,6 +14,7 @@ struct MainView: View {
   @State private var selectedTab: TabType = TabType.users
   @StateObject private var router: MainRouter
   
+  @EnvironmentObject private var orientationInfo: OrientationInfo
   @EnvironmentObject private var networkMonitor: NetworkMonitor
   
   init(router: MainRouter) {
@@ -28,9 +29,6 @@ struct MainView: View {
         tabView
         tabBarView
       }
-    }
-    .onChange(of: networkMonitor.isConnected) { newValue in
-      print("newValue")
     }
   }
   
@@ -65,7 +63,10 @@ private extension MainView {
       Rectangle().fill(.orange)
         .overlay {
           Button {
-                        router.presentFullScreen(.test)
+            
+            router.presentFullScreen(.noInternet({
+              print("close")
+            }))
             
             
             
@@ -113,6 +114,7 @@ private extension MainView {
 //MARK: - Preview
 #Preview {
   MainView(router: .default)
+    .environmentObject(NetworkMonitor.shared)
 }
 
 //MARK: - Constants

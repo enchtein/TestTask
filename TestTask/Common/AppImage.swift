@@ -11,5 +11,9 @@ enum AppImage {
   enum LaunchScreen {
     static let logo = Image(.launchLogo)
   }
+  
+  enum NoInternet {
+    static let logo = Image(.noInternet)
+  }
 }
 

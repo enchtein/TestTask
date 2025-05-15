@@ -9,7 +9,7 @@ import SwiftUI
 
 enum AppView {
   case main
-  case test
+  case noInternet(_ action: () -> Void)
 }
 
 extension AppView: Identifiable {

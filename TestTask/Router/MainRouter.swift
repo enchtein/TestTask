@@ -37,8 +37,9 @@ extension MainRouter {
   @ViewBuilder
   func buildView(view: AppView, route: Route) -> some View {
     switch view {
-    case .test:
-      Rectangle().fill(Color.purple)
+    case .noInternet(let action):
+      NoInternetView.init(action: action)
+//      Rectangle().fill(Color.purple)
     default:
       EmptyView()
     }
