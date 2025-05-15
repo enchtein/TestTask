@@ -9,9 +9,11 @@ import SwiftUI
 
 @main
 struct TestTaskApp: App {
+  @StateObject private var router: MainRouter = .default// = MainRouter(isPresented: .constant(.main))
+  
     var body: some Scene {
         WindowGroup {
-            ContentView()
+          ContentView(router: router)
         }
     }
 }

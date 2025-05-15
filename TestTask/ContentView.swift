@@ -8,17 +8,22 @@
 import SwiftUI
 
 struct ContentView: View {
-    var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
+  @StateObject private var router: MainRouter
+  init(router: MainRouter) {
+    _router = StateObject(wrappedValue: router)
+  }
+  
+  var body: some View {
+    RoutingView(router: router) {
+      MainView(router: router)
+        .modal(item: router.presentionModalOnAllApp) { view in
+          router.view(view: view, route: .modal)
         }
-        .padding()
     }
+
+  }
 }
 
 #Preview {
-    ContentView()
+  ContentView(router: .default)
 }
