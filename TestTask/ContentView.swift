@@ -9,6 +9,7 @@ import SwiftUI
 
 struct ContentView: View {
   @StateObject private var router: MainRouter
+  
   init(router: MainRouter) {
     _router = StateObject(wrappedValue: router)
   }

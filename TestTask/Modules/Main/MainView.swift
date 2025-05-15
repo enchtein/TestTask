@@ -13,6 +13,9 @@ struct MainView: View {
   
   @State private var selectedTab: TabType = TabType.users
   @StateObject private var router: MainRouter
+  
+  @EnvironmentObject private var networkMonitor: NetworkMonitor
+  
   init(router: MainRouter) {
     _router = StateObject(wrappedValue: router)
   }
@@ -25,6 +28,9 @@ struct MainView: View {
         tabView
         tabBarView
       }
+    }
+    .onChange(of: networkMonitor.isConnected) { newValue in
+      print("newValue")
     }
   }
   
