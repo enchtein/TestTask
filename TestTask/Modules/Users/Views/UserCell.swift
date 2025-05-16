@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Kingfisher
 
 struct UserCell: View {
   @EnvironmentObject private var orientationInfo: OrientationInfo
@@ -16,10 +17,7 @@ struct UserCell: View {
   
   var body: some View {
     HStack(alignment: .top, spacing: constants.hStackSpacing) {
-      Image(systemName: "person.circle")
-        .resizable()
-        .frame(size: constants.iconSize)
-        .cornerRadius(constants.iconCorner)
+      userAvatar
       
       ZStack(alignment: .bottom) {
         VStack(alignment: .leading, spacing: constants.vStackSpacing) {
@@ -40,10 +38,39 @@ struct UserCell: View {
     }
     .padding(.top, constants.vPadding)
   }
+  
+  @ViewBuilder
+  var userAvatar: some View {
+    if let url = URL(string: user.photo) {
+      KFImage(url)
+        .placeholder {
+          ProgressView()
+        }
+        .onFailureImage(
+          avatarPlaceholder
+            .renderer()
+            .uiImage
+        )
+        .resizable()
+        .scaledToFill()
+        .clipShape(Circle())
+        .frame(size: constants.iconSize)
+    } else {
+      avatarPlaceholder
+        .resizable()
+        .scaledToFill()
+        .clipShape(Circle())
+        .frame(size: constants.iconSize)
+    }
+  }
 }
 
 //MARK: - UI elements creating
 private extension UserCell {
+  private var avatarPlaceholder: Image {
+    Image(systemName: "person.circle")
+  }
+  
   var name: some View {
     Text(user.name)
       .font(constants.nameFont)

@@ -32,3 +32,9 @@ extension View {
       .frame(width: size.width, height: size.height)
   }
 }
+
+extension View {
+  @MainActor func renderer() -> ImageRenderer<some View> {
+    ImageRenderer(content: self)
+  }
+}
