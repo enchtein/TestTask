@@ -10,6 +10,7 @@ import SwiftUI
 enum AppImage {
   enum LaunchScreen {
     static let logo = Image(.launchLogo)
+    static let logoText = Image(.launchLogoText)
   }
   
   enum NoInternet {

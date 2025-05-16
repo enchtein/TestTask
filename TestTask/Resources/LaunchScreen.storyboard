@@ -17,40 +17,51 @@
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="15" translatesAutoresizingMaskIntoConstraints="NO" id="zwH-fP-Iqz">
-                                <rect key="frame" x="153.66666666666666" y="376" width="85.666666666666657" height="100.33333333333331"/>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="pt1-MK-P3A">
+                                <rect key="frame" x="109.33333333333333" y="368.33333333333331" width="174.33333333333337" height="115.33333333333331"/>
                                 <subviews>
-                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="launchLogo" translatesAutoresizingMaskIntoConstraints="NO" id="cIN-AD-thl">
-                                        <rect key="frame" x="0.0" y="0.0" width="85.666666666666671" height="65"/>
+                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="launchLogo" translatesAutoresizingMaskIntoConstraints="NO" id="sYb-oO-Xz1">
+                                        <rect key="frame" x="34.666666666666671" y="0.0" width="105.00000000000001" height="71.666666666666671"/>
                                         <constraints>
-                                            <constraint firstAttribute="width" secondItem="cIN-AD-thl" secondAttribute="height" multiplier="1.32" id="Oc5-BT-kv1"/>
-                                            <constraint firstAttribute="height" constant="65" id="nEs-jO-9Rr"/>
+                                            <constraint firstAttribute="width" secondItem="sYb-oO-Xz1" secondAttribute="height" multiplier="1.4615" id="aPY-ag-8mV"/>
                                         </constraints>
                                     </imageView>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="TESTTASK" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Rqu-9P-AiP">
-                                        <rect key="frame" x="2" y="80" width="82" height="20.333333333333329"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                        <nil key="textColor"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
+                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="launchLogoText" translatesAutoresizingMaskIntoConstraints="NO" id="obp-Ok-egh">
+                                        <rect key="frame" x="0.0" y="86.666666666666686" width="174.33333333333334" height="28.666666666666671"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" secondItem="obp-Ok-egh" secondAttribute="height" multiplier="6.15" id="I41-70-FRT"/>
+                                        </constraints>
+                                    </imageView>
                                 </subviews>
-                            </stackView>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstItem="obp-Ok-egh" firstAttribute="top" secondItem="sYb-oO-Xz1" secondAttribute="bottom" constant="15" id="3hu-e3-TlC"/>
+                                    <constraint firstItem="sYb-oO-Xz1" firstAttribute="top" secondItem="pt1-MK-P3A" secondAttribute="top" id="S0I-9r-AjL"/>
+                                    <constraint firstItem="sYb-oO-Xz1" firstAttribute="width" secondItem="pt1-MK-P3A" secondAttribute="width" multiplier="0.6" id="Snw-d5-E2M"/>
+                                    <constraint firstItem="obp-Ok-egh" firstAttribute="leading" secondItem="pt1-MK-P3A" secondAttribute="leading" id="hnh-aA-bct"/>
+                                    <constraint firstItem="sYb-oO-Xz1" firstAttribute="centerX" secondItem="pt1-MK-P3A" secondAttribute="centerX" id="j5m-7t-V2b"/>
+                                    <constraint firstAttribute="bottom" secondItem="obp-Ok-egh" secondAttribute="bottom" id="lTb-n8-2s5"/>
+                                    <constraint firstAttribute="trailing" secondItem="obp-Ok-egh" secondAttribute="trailing" id="mBE-u9-Cqe"/>
+                                </constraints>
+                            </view>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="vDu-zF-Fre"/>
                         <color key="backgroundColor" name="primary"/>
                         <constraints>
-                            <constraint firstItem="zwH-fP-Iqz" firstAttribute="centerY" secondItem="5EZ-qb-Rvc" secondAttribute="centerY" id="0nv-n9-2Fw"/>
-                            <constraint firstItem="zwH-fP-Iqz" firstAttribute="centerX" secondItem="5EZ-qb-Rvc" secondAttribute="centerX" id="X3G-sZ-ugc"/>
+                            <constraint firstItem="pt1-MK-P3A" firstAttribute="centerY" secondItem="5EZ-qb-Rvc" secondAttribute="centerY" id="8a8-3J-ZWf"/>
+                            <constraint firstItem="pt1-MK-P3A" firstAttribute="centerX" secondItem="5EZ-qb-Rvc" secondAttribute="centerX" id="Hmh-1J-jJ6"/>
+                            <constraint firstItem="pt1-MK-P3A" firstAttribute="width" secondItem="5EZ-qb-Rvc" secondAttribute="width" multiplier="0.444" id="tnB-Nb-Xuo"/>
                         </constraints>
                     </view>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Ief-a0-LHa" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="132" y="-34"/>
+            <point key="canvasLocation" x="130.53435114503816" y="-34.507042253521128"/>
         </scene>
     </scenes>
     <resources>
         <image name="launchLogo" width="95.666664123535156" height="65.666664123535156"/>
+        <image name="launchLogoText" width="160" height="26.666666030883789"/>
         <namedColor name="primary">
             <color red="0.95686274509803926" green="0.8784313725490196" blue="0.25490196078431371" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
