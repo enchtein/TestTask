@@ -11,8 +11,10 @@ struct UserCell: View {
   @EnvironmentObject private var orientationInfo: OrientationInfo
   private var constants: Constants { Constants(orientationInfo) }
   
+  let user: User
+  let isLastCell: Bool
+  
   var body: some View {
-    
     HStack(alignment: .top, spacing: constants.hStackSpacing) {
       Image(systemName: "person.circle")
         .resizable()
@@ -25,12 +27,15 @@ struct UserCell: View {
           
           createSubVStack(firstText: email, secondText: phone)
         }
+        .frame(maxWidth: .infinity, alignment: .topLeading)
         .padding(.bottom, constants.vPadding)
         
-        Divider()
-          .frame(width: .infinity, height: 1)
-          .background(constants.dividerColor)
-          .opacity(0.25)
+        if !isLastCell {
+          Divider()
+            .frame(height: 1)
+            .background(constants.dividerColor)
+            .opacity(0.25)
+        }
       }
     }
     .padding(.top, constants.vPadding)
@@ -40,23 +45,23 @@ struct UserCell: View {
 //MARK: - UI elements creating
 private extension UserCell {
   var name: some View {
-    Text("Malcolm Bailey")
+    Text(user.name)
       .font(constants.nameFont)
       .foregroundStyle(constants.baseText)
   }
   var position: some View {
-    Text("Frontend developer")
+    Text(user.position)
       .font(constants.additionalFont)
       .foregroundStyle(constants.secondaryText)
   }
   var email: some View {
-    Text("jany_murazik51@hotmail.comjany_murazik51@hotmail.comjany_murazik51@hotmail.comjany_murazik51@hotmail.com")
+    Text(user.email)
       .lineLimit(1)
       .font(constants.additionalFont)
       .foregroundStyle(constants.baseText)
   }
   var phone: some View {
-    Text("+38 (098) 278 76 24")
+    Text(user.phone)
       .font(constants.additionalFont)
       .foregroundStyle(constants.baseText)
   }
@@ -74,7 +79,7 @@ private extension UserCell {
 
 //MARK: - Preview
 #Preview {
-  UserCell()
+  UserCell(user: .mock, isLastCell: false)
     .environmentObject(OrientationInfo.phone)
 }
 

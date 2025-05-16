@@ -6,6 +6,10 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		8A79B9362DD76A9800F92977 /* Moya in Frameworks */ = {isa = PBXBuildFile; productRef = 8A79B9352DD76A9800F92977 /* Moya */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
 		8A731A342DD48F8600DE720C /* TestTask.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TestTask.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -36,6 +40,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8A79B9362DD76A9800F92977 /* Moya in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -78,6 +83,7 @@
 			);
 			name = TestTask;
 			packageProductDependencies = (
+				8A79B9352DD76A9800F92977 /* Moya */,
 			);
 			productName = TestTask;
 			productReference = 8A731A342DD48F8600DE720C /* TestTask.app */;
@@ -107,6 +113,9 @@
 			);
 			mainGroup = 8A731A2B2DD48F8600DE720C;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				8A79B9342DD76A9800F92977 /* XCRemoteSwiftPackageReference "Moya" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 8A731A352DD48F8600DE720C /* Products */;
 			projectDirPath = "";
@@ -337,6 +346,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		8A79B9342DD76A9800F92977 /* XCRemoteSwiftPackageReference "Moya" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Moya/Moya.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 15.0.3;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		8A79B9352DD76A9800F92977 /* Moya */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 8A79B9342DD76A9800F92977 /* XCRemoteSwiftPackageReference "Moya" */;
+			productName = Moya;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 8A731A2C2DD48F8600DE720C /* Project object */;
 }

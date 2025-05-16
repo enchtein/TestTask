@@ -27,7 +27,7 @@ struct UsersView: View {
           switch newValue {
           case .error(let error):
             let action = { [weak viewModel, weak router] in
-              viewModel?.repeatLastTask()
+              viewModel?.fetchUsersIfNeeded()
               router?.dismiss()
             }
             router.presentFullScreen(.noInternet(error: error, action))
@@ -68,9 +68,15 @@ private extension UsersView {
   var usersListView: some View {
     VStack(spacing: .zero) {
       ScrollView {
-        LazyVStack(spacing: 24.0) {
+        LazyVStack(spacing: .zero) {
           ForEach(viewModel.users, id: \.self) { user in
-            Text(user)
+            let isLast = viewModel.users.last?.id == user.id
+            UserCell(user: user, isLastCell: isLast)
+              .onAppear {
+                if isLast {
+                  viewModel.fetchUsersIfNeeded()
+                }
+              }
           }
         }
       }
@@ -79,6 +85,7 @@ private extension UsersView {
         spinner
       }
     }
+    .padding(.horizontal, constants.hPadding)
     .animation(.easeInOut, value: viewModel.loadingState)
   }
   
@@ -123,6 +130,8 @@ fileprivate struct Constants: CommonConstants {
   var spacing: CGFloat {
     24.0 + additionalValue
   }
+  
+  var hPadding: CGFloat {
+    16.0 + additionalValue
+  }
 }
-
-

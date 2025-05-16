@@ -9,41 +9,35 @@ import SwiftUI
 
 @MainActor
 final class UsersViewModel: ObservableObject {
+  private let maxCountOfUsersOnPage: Int = 10
   @Published private(set) var loadingState: LoadingState = .idle
   
-  @Published private(set) var users: [String] = []
+  private var lastUserListInfo: UserListDTO? { userListInfo.last }
+  
+  private(set) var userListInfo = [UserListDTO]()
+  @Published private(set) var users = [User]()
   
   init() {
-    fetchUsers()
+    fetchUsersIfNeeded()
   }
 }
 
 //MARK: - API
 extension UsersViewModel {
-  func repeatLastTask() {
-    fetchUsers()
+  func fetchUsersIfNeeded() {
+    guard let newFilter = createActualFilter() else { return }
+    fetchUsers(by: newFilter)
   }
 }
 //MARK: - Network layer
 private extension UsersViewModel {
-  func fetchUsers() {
+  func fetchUsers(by filter: UserListFilter) {
     loadingState = .loading
     Task {
       do {
-        try? await Task.sleep(for: .seconds(3.0))
+        let res = try await NetworkAdapter.fetchUserList(by: filter)
         
-        users = [
-          "users_1",
-          "users_2",
-          "users_3",
-          "users_4",
-          "users_5",
-          "users_6",
-          "users_7",
-          "users_8",
-          "users_9"
-        ]
-        
+        processingInfo(from: res)
         loadingState = .success
       } catch {
         if !NetworkMonitor.shared.isConnected {
@@ -53,5 +47,34 @@ private extension UsersViewModel {
         }
       }
     }
+  }
+}
+//MARK: - Helpers
+private extension UsersViewModel {
+  func createActualFilter() -> UserListFilter? {
+    let newFilter: UserListFilter?
+    if let lastUserListInfo {
+      if lastUserListInfo.links.nextURL != nil {
+        newFilter = UserListFilter(page: lastUserListInfo.page + 1, count: maxCountOfUsersOnPage)
+      } else {
+        newFilter = nil // all info loaded
+      }
+    } else {
+      newFilter = UserListFilter(page: 1, count: maxCountOfUsersOnPage)
+    }
+    
+    return newFilter
+  }
+  
+  func processingInfo(from list: UserListDTO) {
+    let existPages = userListInfo.filter { $0.page != list.page }
+    
+    var newUserListInfo = existPages
+    newUserListInfo.append(list)
+    
+    userListInfo = newUserListInfo
+    
+    let allUsers = newUserListInfo.map { $0.users }.reduce([], +)
+    users = allUsers
   }
 }
