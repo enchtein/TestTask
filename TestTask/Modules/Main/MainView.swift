@@ -60,32 +60,7 @@ private extension MainView {
   func tabItemView(for type: TabType) -> some View {
     switch type {
     case .users:
-      Rectangle().fill(.orange)
-        .overlay {
-          Button {
-            
-            router.presentFullScreen(.noInternet({
-              print("close")
-            }))
-            
-            
-            
-            
-//            router.navigateTo(.test)
-//            router.presentSheet(.test)
-//            router.presentFullScreen(.test)
-//            withAnimation {
-//              router.presentModal(.test)
-//            }
-//            withAnimation {
-//              router.presentModalOnAllApp(.test)
-//            }
-            
-          } label: {
-            Text("presentFullScreen")
-          }
-
-        }
+      UsersView(router: router)
     case .singUp:
       Rectangle().fill(.red)
     }
@@ -114,6 +89,7 @@ private extension MainView {
 //MARK: - Preview
 #Preview {
   MainView(router: .default)
+    .environmentObject(OrientationInfo.phone)
     .environmentObject(NetworkMonitor.shared)
 }
 

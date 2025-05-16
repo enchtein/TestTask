@@ -6,19 +6,17 @@
 //
 
 enum LoadingState: Equatable {
-  case indle
+  case idle
   case loading
   case success
   case error(Error)
-  case readyToRepeatTask
   
   private var descriptionText: String {
     switch self {
-    case .indle: "indle"
+    case .idle: "idle"
     case .loading: "loading"
     case .success: "success"
     case .error(let error): error.localizedDescription
-    case .readyToRepeatTask: "readyToRepeatTask"
     }
   }
   

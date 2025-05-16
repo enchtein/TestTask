@@ -11,6 +11,7 @@ struct NoInternetView: View {
   @EnvironmentObject private var orientationInfo: OrientationInfo
   private var constants: Constants { Constants(orientationInfo) }
   
+  let error: Error
   let action: () -> Void
   
   var body: some View {
@@ -35,15 +36,23 @@ private extension NoInternetView {
   }
   
   var msg: some View {
-    Text("There is no internet connection")
+    errorText()
       .foregroundStyle(constants.textColor)
       .font(constants.font)
+  }
+  
+  func errorText() -> Text {
+    if let error = error as? ErrorProcessing {
+      Text(error.errorMsg)
+    } else {
+      Text(error.localizedDescription)
+    }
   }
 }
 
 //MARK: - Preview
 #Preview {
-  NoInternetView(action: {})
+  NoInternetView(error: ErrorProcessing.noInterner, action: {})
     .environmentObject(OrientationInfo.phone)
 }
 

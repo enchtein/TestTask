@@ -37,8 +37,8 @@ extension MainRouter {
   @ViewBuilder
   func buildView(view: AppView, route: Route) -> some View {
     switch view {
-    case .noInternet(let action):
-      NoInternetView.init(action: action)
+    case .noInternet(let error, let action):
+      NoInternetView(error: error, action: action)
     default:
       EmptyView()
     }

@@ -34,4 +34,10 @@ enum AppColor {
     static let bg = background
     static let text = mainText
   }
+  
+  enum UsersView {
+    static let dividerColor = placeholderText
+    static let baseText = mainText
+    static let secondaryText = additionalText
+  }
 }
