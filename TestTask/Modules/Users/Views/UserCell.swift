@@ -117,14 +117,9 @@ fileprivate struct Constants: CommonConstants {
     self.orientationInfo = orientationInfo
   }
   
-  
-  
   var iconSize: CGSize {
     let sideSize: CGFloat = orientationInfo.isPhone ? 50.0 : 75.0
     return .init(width: sideSize, height: sideSize)
-  }
-  var iconCorner: CGFloat {
-    iconSize.height / 2
   }
   
   var hStackSpacing: CGFloat {
