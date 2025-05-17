@@ -88,13 +88,27 @@ private extension CreateUserView {
     VStack(spacing: constants.contentVStackSpacing) {
       ftVStack
       
-      Rectangle()
-        .fill(.orange)
-        .frame(height: 400.0)
+      postionItem
       
       Rectangle()
         .fill(.red)
         .frame(height: 56.0)
+    }
+  }
+  
+  var postionItem: some View {
+    VStack(spacing: constants.ftVStackSpacing) {
+      Text("Select your position")
+        .frame(maxWidth: .infinity, alignment: .leading)
+      
+      postionList
+    }
+  }
+  var postionList: some View {
+    VStack(spacing: .zero) {
+      ForEach(viewModel.positions, id: \.self) { position in
+        PositionSelectionCell(type: position, selectedType: $viewModel.selectedPostion)
+      }
     }
   }
 }

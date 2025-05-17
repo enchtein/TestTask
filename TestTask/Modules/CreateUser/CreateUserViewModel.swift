@@ -19,6 +19,7 @@ class CreateUserViewModel: ObservableObject {
   
   @Published var signUpAvailability: Bool = false
   
+  @Published var selectedPostion: Position?
   @Published private(set) var positions = [Position]()
   
   init() {
@@ -59,6 +60,7 @@ extension CreateUserViewModel {
       do {
         let res = try await NetworkAdapter.fetchPositions()
         positions = res.positions
+        selectedPostion = res.positions.first
         
         loadingState = .success
       } catch {

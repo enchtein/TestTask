@@ -46,5 +46,9 @@ enum AppColor {
     static let secondaryText = additionalText
     static let placeholderOrBorder = placeholderText
     static let error = Color(.errorC)
+    
+    static let selectedInner = background
+    static let selectedOuter = secondary
+    static let unSelectedBorder = Color(.unSelectedPosition)
   }
 }
