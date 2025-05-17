@@ -64,6 +64,7 @@ struct PositionSelectionCell: View {
       
       Circle()
         .fill(constants.selectedInnerColor)
+        .shadow(color: Color.black.opacity(0.16), radius: 5, x: 1.0, y: 0.5)
         .frame(size: constants.dotIconSize)
     }
   }
