@@ -43,6 +43,9 @@ struct MainView: View {
     .tabViewStyle(.page(indexDisplayMode: .never))
     .animation(.easeInOut, value: selectedTab)
     .transition(.slide)
+    .onChange(of: selectedTab) { newValue in
+      UIApplication.shared.hideKeyboard()
+    }
   }
   private var tabBarView: some View {
     HStack(spacing: .zero) {

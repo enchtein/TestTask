@@ -12,13 +12,16 @@ struct TestTaskApp: App {
   @StateObject var orientationInfo = OrientationInfo.shared
   @StateObject private var networkMonitor = NetworkMonitor.shared
   
-  @StateObject private var router: MainRouter = .default// = MainRouter(isPresented: .constant(.main))
+  @StateObject private var router: MainRouter = .default
   
-    var body: some Scene {
-        WindowGroup {
-          ContentView(router: router)
-            .environmentObject(orientationInfo)
-            .environmentObject(networkMonitor)
+  var body: some Scene {
+    WindowGroup {
+      ContentView(router: router)
+        .environmentObject(orientationInfo)
+        .environmentObject(networkMonitor)
+        .onAppear {
+          UIApplication.shared.addHideKeyboardTapGestureRecognizer()
         }
     }
+  }
 }
