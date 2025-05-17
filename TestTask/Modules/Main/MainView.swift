@@ -30,6 +30,7 @@ struct MainView: View {
         tabBarView
       }
     }
+    .ignoresSafeArea(.keyboard)
   }
   
   private var tabView: some View {
@@ -62,7 +63,7 @@ private extension MainView {
     case .users:
       UsersView(router: router)
     case .singUp:
-      Rectangle().fill(.red)
+      CreateUserView()
     }
   }
   func tabItemButton(for type: TabType) -> some View {

@@ -34,7 +34,7 @@ struct CommonButton: View {
     } label: {
       Text(title)
         .font(constants.font)
-        .foregroundStyle(constants.text)
+        .foregroundStyle(textColor)
         .padding(.vertical, 12.0)
         .padding(.horizontal, 31.5)
     }
@@ -43,7 +43,7 @@ struct CommonButton: View {
       size = proxy
     }
     .background {
-      AppColor.primary
+      bgColor
         .cornerRadius(cornerRadius)
     }
     .animation(.linear, value: isActive)
@@ -60,6 +60,7 @@ struct CommonButton: View {
 //MARK: - Preview
 #Preview {
   CommonButton.init(title: "Try again", isActive: .constant(true)) {}
+    .environmentObject(OrientationInfo.phone)
 }
 
 //MARK: - Constants

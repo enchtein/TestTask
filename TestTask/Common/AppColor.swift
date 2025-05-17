@@ -40,4 +40,11 @@ enum AppColor {
     static let baseText = mainText
     static let secondaryText = additionalText
   }
+  
+  enum CreateUserView {
+    static let baseText = mainText
+    static let secondaryText = additionalText
+    static let placeholderOrBorder = placeholderText
+    static let error = Color(.errorC)
+  }
 }

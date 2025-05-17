@@ -21,7 +21,7 @@ struct ContentView: View {
           router.view(view: view, route: .modal)
         }
     }
-
+    .keyboardHeightEnvironmentValue()
   }
 }
 
