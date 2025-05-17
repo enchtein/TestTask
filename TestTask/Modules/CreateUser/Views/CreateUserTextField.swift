@@ -81,7 +81,7 @@ private extension CreateUserTextField {
       .foregroundStyle(constants.textColor)
       .placeholder(when: itemObj.text.isEmpty) {
         Text(itemObj.type.placeholderText)
-          .font(constants.helperTextFont)
+          .font(constants.font)
           .foregroundColor(currentHelpersColor)
       }
       .onChange(of: tfText) { newValue in

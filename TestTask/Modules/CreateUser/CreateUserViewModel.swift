@@ -17,6 +17,8 @@ class CreateUserViewModel: ObservableObject {
   @Published private(set) var emailObj = CreateUserTextFieldObj.init(type: .email)
   @Published private(set) var phoneObj = CreateUserTextFieldObj.init(type: .phone)
   
+  @Published private(set) var avatarObj = CreateUserPhoneObject.init(type: .avatar)
+  
   @Published var signUpAvailability: Bool = false
   
   @Published var selectedPostion: Position?
@@ -87,6 +89,9 @@ private extension CreateUserViewModel {
     case .phone:
       phoneObj.isEmptyValue = phoneObj.text.isEmpty
       phoneObj.isErrored = !isValidPhoneNumber(getClearPhoneNumber())
+    case .avatar:
+      avatarObj.isEmptyValue = avatarObj.selectedImage == nil
+      avatarObj.isErrored = avatarObj.selectedImage == nil
     }
   }
   

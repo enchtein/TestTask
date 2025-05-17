@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Combine
 
 class CreateUserFieldObj: ObservableObject {
   let type: CreateUserFieldType
@@ -27,13 +28,43 @@ class CreateUserTextFieldObj: CreateUserFieldObj {
   @Published var isFocused: Bool = false
   @Published var text: String = ""
 }
-
 //MARK: - Mock's
 extension CreateUserTextFieldObj {
   static let mock = CreateUserTextFieldObj(type: .name)
 }
 
-
+class CreateUserPhoneObject: CreateUserFieldObj {
+  private var cancellables: Set<AnyCancellable> = []
+  @Published var selectedImage: UIImage?
+  @Published var selectedImageName: String?
+  
+  override init(type: CreateUserFieldType) {
+    super.init(type: type)
+    
+    subscribeForChanges()
+  }
+  
+  private func subscribeForChanges() {
+    $selectedImage
+      .receive(on: RunLoop.main)
+      .sink { [weak self] _ in
+        self?.updateSelectedImageName()
+      }
+      .store(in: &cancellables)
+  }
+  
+  private func updateSelectedImageName() {
+    let newText = selectedImage == nil ? nil : "Image selected"
+    
+    guard selectedImageName != newText else { return }
+    selectedImageName = newText
+    isErrored = newText == nil
+  }
+}
+//MARK: - Mock's
+extension CreateUserPhoneObject {
+  static let mock = CreateUserPhoneObject(type: .avatar)
+}
 
 
 
@@ -41,12 +72,14 @@ enum CreateUserFieldType: Int, CaseIterable {
   case name = 0
   case email
   case phone
+  case avatar
   
   var hintText: String? {
     switch self {
     case .name: nil
     case .email: "Email"
     case .phone: nil
+    case .avatar: nil
     }
   }
   var placeholderText: String {
@@ -54,6 +87,7 @@ enum CreateUserFieldType: Int, CaseIterable {
     case .name: "Your name"
     case .email: "Email"
     case .phone: "Phone"
+    case .avatar: "Upload your photo"
     }
   }
   
@@ -62,6 +96,7 @@ enum CreateUserFieldType: Int, CaseIterable {
     case .name: "Name shouldn't contains numbers or symbols"
     case .email: "Invalid email format"
     case .phone: "Invalid phone format"
+    case .avatar: ""
     }
   }
   var emptyValueErrorMsg: String {
@@ -69,6 +104,7 @@ enum CreateUserFieldType: Int, CaseIterable {
     case .name: "Required field"
     case .email: "Email is required"
     case .phone: "Required field"
+    case .avatar: "Photo is required"
     }
   }
   
@@ -77,6 +113,7 @@ enum CreateUserFieldType: Int, CaseIterable {
     case .name: ""
     case .email: ""
     case .phone: "+38 (XXX) XXX - XX - XX"
+    case .avatar: ""
     }
   }
   
@@ -88,6 +125,7 @@ enum CreateUserFieldType: Int, CaseIterable {
         .emailAddress
     case .phone:
         .numberPad
+    case .avatar: .default
     }
   }
 }

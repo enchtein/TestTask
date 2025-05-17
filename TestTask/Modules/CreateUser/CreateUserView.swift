@@ -90,9 +90,7 @@ private extension CreateUserView {
       
       postionItem
       
-      Rectangle()
-        .fill(.red)
-        .frame(height: 56.0)
+      avatarItem
     }
   }
   
@@ -109,6 +107,12 @@ private extension CreateUserView {
       ForEach(viewModel.positions, id: \.self) { position in
         PositionSelectionCell(type: position, selectedType: $viewModel.selectedPostion)
       }
+    }
+  }
+  
+  var avatarItem: some View {
+    CreateUserFieldContainer(itemObj: viewModel.avatarObj, hIndent: constants.hPadding) {
+      CreateUserAvatarField(itemObj: viewModel.avatarObj, hIndent: constants.hPadding)
     }
   }
 }
