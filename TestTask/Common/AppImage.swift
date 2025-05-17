@@ -16,5 +16,9 @@ enum AppImage {
   enum NoInternet {
     static let logo = Image(.noInternet)
   }
+  
+  enum Users {
+    static let noUsers = Image(.noUsers)
+  }
 }
 

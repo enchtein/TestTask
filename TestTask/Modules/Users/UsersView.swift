@@ -50,7 +50,7 @@ struct UsersView: View {
 private extension UsersView {
   var noUsersView: some View {
     VStack(spacing: constants.spacing) {
-      AppImage.NoInternet.logo
+      AppImage.Users.noUsers
         .resizable()
         .frame(size: constants.iconSize)
       
