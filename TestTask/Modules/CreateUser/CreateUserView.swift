@@ -8,13 +8,17 @@
 import SwiftUI
 
 struct CreateUserView: View {
+  @ObservedObject private var router: MainRouter
   @EnvironmentObject private var orientationInfo: OrientationInfo
   private var constants: Constants { Constants(orientationInfo) }
   
   @StateObject private var viewModel: CreateUserViewModel
   @Environment(\.keyboardHeight) var keyboardHeight
   
-  init() {
+  @State private var isOnScreen: Bool = false
+  
+  init(router: MainRouter) {
+    self.router = router
     _viewModel = StateObject(wrappedValue: CreateUserViewModel())
   }
   
@@ -31,6 +35,27 @@ struct CreateUserView: View {
       }
       .padding(.horizontal, constants.hPadding)
       .padding(.vertical, constants.vPadding)
+    }
+    .onChange(of: viewModel.loadingState) { newValue in
+      guard isOnScreen else { return }
+      switch newValue {
+      case .error(let error):
+        let action = { [weak viewModel, weak router] in
+          viewModel?.fetchPositions()
+          router?.dismiss()
+        }
+        router.presentFullScreen(.noInternet(error: error, action))
+        
+      default: break
+      }
+    }
+    .onAppear {
+      isOnScreen = true
+      
+      viewModel.resetErroredStateIfNeeded()
+    }
+    .onDisappear {
+      isOnScreen = false
     }
   }
   
@@ -76,7 +101,7 @@ private extension CreateUserView {
 
 //MARK: - Preview
 #Preview {
-  CreateUserView()
+  CreateUserView(router: .default)
     .environmentObject(OrientationInfo.phone)
 }
 

@@ -8,8 +8,10 @@
 import SwiftUI
 import Combine
 
+@MainActor
 class CreateUserViewModel: ObservableObject {
   private var cancellables: Set<AnyCancellable> = []
+  @Published private(set) var loadingState: LoadingState = .idle
   
   @Published private(set) var nameObj = CreateUserTextFieldObj.init(type: .name)
   @Published private(set) var emailObj = CreateUserTextFieldObj.init(type: .email)
@@ -17,13 +19,56 @@ class CreateUserViewModel: ObservableObject {
   
   @Published var signUpAvailability: Bool = false
   
+  @Published private(set) var positions = [Position]()
+  
   init() {
+    fetchPositions()
     subscribeForChanges() //Call once on init
+    print("CreateUserViewModel init")
+  }
+  deinit {
+    print("CreateUserViewModel deinit")
   }
   
   func signUpAction() {
     CreateUserFieldType.allCases.forEach { checkErrors(for: $0) }
     print("create user action")
+  }
+  func resetErroredStateIfNeeded() {
+    switch loadingState {
+    case .error(_):
+      let orgState = loadingState
+      
+      loadingState = .idle
+      Task {
+        try? await Task.sleep(for: .seconds(1))
+        
+        loadingState = orgState
+      }
+    default: break
+    }
+  }
+}
+
+//MARK: - Network layer
+extension CreateUserViewModel {
+  func fetchPositions() {
+    loadingState = .loading
+    
+    Task {
+      do {
+        let res = try await NetworkAdapter.fetchPositions()
+        positions = res.positions
+        
+        loadingState = .success
+      } catch {
+        if !NetworkMonitor.shared.isConnected {
+          loadingState = .error(ErrorProcessing.noInterner)
+        } else {
+          loadingState = .error(error)
+        }
+      }
+    }
   }
 }
 

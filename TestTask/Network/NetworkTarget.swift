@@ -10,12 +10,14 @@ import Moya
 
 enum NetworkTarget {
   case getUsersList(_ filter: UserListFilter)
+  case getPositionsList
 }
 
 extension NetworkTarget: TargetType {
   var actionName: String {
     switch self {
     case .getUsersList: "users"
+    case .getPositionsList: "positions"
     }
   }
   var baseURL: URL {
@@ -25,12 +27,14 @@ extension NetworkTarget: TargetType {
   var path: String {
     switch self {
     case .getUsersList: "api/v1/" + actionName
+    case .getPositionsList: "api/v1/" + actionName
     }
   }
   
   var method: Moya.Method {
     switch self {
     case .getUsersList: .get
+    case .getPositionsList: .get
     }
   }
   
@@ -38,6 +42,8 @@ extension NetworkTarget: TargetType {
     switch self {
     case .getUsersList(let filter):
         .requestParameters(parameters: filter.dictionary, encoding: URLEncoding.default)
+    case .getPositionsList:
+        .requestPlain
     }
   }
   

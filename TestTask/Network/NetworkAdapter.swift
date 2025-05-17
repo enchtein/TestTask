@@ -15,4 +15,8 @@ struct NetworkAdapter {
   static func fetchUserList(by filter: UserListFilter) async throws -> UserListDTO {
     try await provider.request(.getUsersList(filter))
   }
+  
+  static func fetchPositions() async throws -> PositionsList {
+    try await provider.request(.getPositionsList)
+  }
 }

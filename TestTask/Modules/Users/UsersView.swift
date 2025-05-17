@@ -15,28 +15,38 @@ struct UsersView: View {
   private var constants: Constants { Constants(orientationInfo) }
   @StateObject private var viewModel: UsersViewModel
   
+  @State private var isOnScreen: Bool = false
+  
   init(router: MainRouter) {
     self.router = router
     _viewModel = StateObject.init(wrappedValue: UsersViewModel())
   }
   
-    var body: some View {
-      mainContent
-        .animation(.easeInOut, value: viewModel.users)
-        .onChange(of: viewModel.loadingState) { newValue in
-          switch newValue {
-          case .error(let error):
-            let action = { [weak viewModel, weak router] in
-              viewModel?.fetchUsersIfNeeded()
-              router?.dismiss()
-            }
-            router.presentFullScreen(.noInternet(error: error, action))
-            
-          default: break
+  var body: some View {
+    mainContent
+      .animation(.easeInOut, value: viewModel.users)
+      .onChange(of: viewModel.loadingState) { newValue in
+        guard isOnScreen else { return }
+        switch newValue {
+        case .error(let error):
+          let action = { [weak viewModel, weak router] in
+            viewModel?.fetchUsersIfNeeded()
+            router?.dismiss()
           }
+          router.presentFullScreen(.noInternet(error: error, action))
+          
+        default: break
         }
-    }
-  
+      }
+      .onAppear {
+        isOnScreen = true
+        
+        viewModel.resetErroredStateIfNeeded()
+      }
+      .onDisappear {
+        isOnScreen = false
+      }
+  }
   @ViewBuilder
   private var mainContent: some View {
     if viewModel.users.isEmpty {

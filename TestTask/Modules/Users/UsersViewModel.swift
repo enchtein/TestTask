@@ -19,6 +19,10 @@ final class UsersViewModel: ObservableObject {
   
   init() {
     fetchUsersIfNeeded()
+    print("UsersViewModel init")
+  }
+  deinit {
+    print("UsersViewModel deinit")
   }
 }
 
@@ -27,6 +31,17 @@ extension UsersViewModel {
   func fetchUsersIfNeeded() {
     guard let newFilter = createActualFilter() else { return }
     fetchUsers(by: newFilter)
+  }
+  
+  func resetErroredStateIfNeeded() {
+    switch loadingState {
+    case .error(_):
+      let orgState = loadingState
+      
+      loadingState = .idle
+      loadingState = orgState
+    default: break
+    }
   }
 }
 //MARK: - Network layer

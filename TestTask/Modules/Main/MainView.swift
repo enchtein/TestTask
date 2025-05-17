@@ -66,7 +66,7 @@ private extension MainView {
     case .users:
       UsersView(router: router)
     case .singUp:
-      CreateUserView()
+      CreateUserView(router: router)
     }
   }
   func tabItemButton(for type: TabType) -> some View {
