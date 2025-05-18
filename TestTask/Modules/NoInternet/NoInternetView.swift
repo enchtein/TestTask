@@ -15,13 +15,17 @@ struct NoInternetView: View {
   let action: () -> Void
   
   var body: some View {
-    VStack(spacing: constants.spacing) {
-      icon
+    ZStack {
+      AppColor.background.ignoresSafeArea()
       
-      msg
-      
-      CommonButton(title: "Try again", isActive: .constant(true)) {
-        action()
+      VStack(spacing: constants.spacing) {
+        icon
+        
+        msg
+        
+        CommonButton(title: "Try again", isActive: .constant(true)) {
+          action()
+        }
       }
     }
   }

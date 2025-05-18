@@ -16,6 +16,8 @@ struct CreationUserResult: View {
   
   var body: some View {
     ZStack {
+      AppColor.background.ignoresSafeArea()
+      
       VStack(spacing: constants.spacing) {
         icon
         
