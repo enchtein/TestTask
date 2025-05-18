@@ -17,6 +17,9 @@ enum AppColor {
   static let placeholderText = Color(.placeholderColorText)
   
   enum MainView {
+    static let headerBg = primary
+    static let headerText = Color(.headerText)
+    
     static let tabViewBg = Color(.tabViewBg)
     static let selectedTabTint = secondary
     static let unSelectedTabTint = additionalText

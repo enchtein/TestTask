@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct MainView: View {
-  private let constants = Constants()
+  private var constants: Constants { Constants(orientationInfo) }
   private let dataSource = TabType.allCases
   
   @State private var selectedTab: TabType = TabType.users
@@ -28,7 +28,11 @@ struct MainView: View {
       AppColor.background.ignoresSafeArea()
       
       VStack(spacing: .zero) {
+        headerView
+          
         tabView
+          .layoutPriority(1)
+        
         tabBarView
       }
     }
@@ -62,6 +66,26 @@ struct MainView: View {
 
 //MARK: - UI elements creating
 private extension MainView {
+  var headerViewText: Text {
+    switch selectedTab {
+    case .users:
+      Text("Working with GET request")
+    case .singUp:
+      Text("Working with POST request")
+    }
+  }
+  var headerView: some View {
+    ZStack {
+      constants.colorTheme.headerBg
+      
+      headerViewText
+        .font(constants.headerFont)
+        .foregroundStyle(constants.colorTheme.headerText)
+        .padding(constants.tabItemVIndent)
+        .animation(.easeInOut, value: selectedTab)
+    }
+  }
+  
   @ViewBuilder
   func tabItemView(for type: TabType) -> some View {
     switch type {
@@ -79,7 +103,7 @@ private extension MainView {
         type.image
         type.title
       }
-      .padding(.vertical, constants.tabItemVInden)
+      .padding(.vertical, constants.tabItemVIndent)
       .tint(tabItemTint(for: type))
     }
   }
@@ -100,9 +124,19 @@ private extension MainView {
 }
 
 //MARK: - Constants
-fileprivate struct Constants {
+fileprivate struct Constants: CommonConstants {
+  var orientationInfo: OrientationInfo
+  init(_ orientationInfo: OrientationInfo) {
+    self.orientationInfo = orientationInfo
+  }
+  
   let colorTheme = AppColor.MainView.self
   
   let tabItemHStackSpacing: CGFloat = 8.0
-  let tabItemVInden: CGFloat = 16.0
+  let tabItemVIndent: CGFloat = 16.0
+  
+  var headerFont: Font {
+    let phoneFont = 20.0
+    return AppFont.font(.regular, size: phoneFont + additionalValue)
+  }
 }
