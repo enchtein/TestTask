@@ -9,17 +9,17 @@ import SwiftUI
 import Combine
 
 @MainActor
-class CreateUserViewModel: ObservableObject {
+final class CreateUserViewModel: ObservableObject {
   @ObservedObject private(set) var sharedData: SharedData
   
   private var cancellables: Set<AnyCancellable> = []
   @Published private(set) var loadingState: LoadingState = .idle
   
-  @Published private(set) var nameObj = CreateUserTextFieldObj.init(type: .name)
-  @Published private(set) var emailObj = CreateUserTextFieldObj.init(type: .email)
-  @Published private(set) var phoneObj = CreateUserPhoneTextFieldObj.init(type: .phone)
+  @Published private(set) var nameObj = CreateUserTextFieldObj(type: .name)
+  @Published private(set) var emailObj = CreateUserTextFieldObj(type: .email)
+  @Published private(set) var phoneObj = CreateUserPhoneTextFieldObj(type: .phone)
   
-  @Published private(set) var avatarObj = CreateUserPhoneObject.init(type: .avatar)
+  @Published private(set) var avatarObj = CreateUserPhoneObject(type: .avatar)
   
   @Published var signUpAvailability: Bool = false
   
@@ -213,9 +213,4 @@ private extension CreateUserViewModel {
   func updateSignUpAvailability() {
     signUpAvailability = !emailObj.text.isEmpty
   }
-}
-
-enum LastTaskOperation {
-  case fetchingPositions
-  case userCreation
 }

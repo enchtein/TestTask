@@ -59,7 +59,7 @@ struct CommonButton: View {
 
 //MARK: - Preview
 #Preview {
-  CommonButton.init(title: "Try again", isActive: .constant(true)) {}
+  CommonButton(title: "Try again", isActive: .constant(true)) {}
     .environmentObject(OrientationInfo.phone)
 }
 

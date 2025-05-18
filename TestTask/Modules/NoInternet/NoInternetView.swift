@@ -83,5 +83,3 @@ fileprivate struct Constants: CommonConstants {
   }
   var textColor: Color { colorTheme.text }
 }
-
-

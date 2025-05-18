@@ -7,7 +7,7 @@
 
 import Foundation
 
-class SharedData: ObservableObject {
+final class SharedData: ObservableObject {
   @Published var isReloadNeeded: Bool = false
   
   func resetParametersInNeeded() {

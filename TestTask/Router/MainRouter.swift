@@ -8,7 +8,6 @@
 import SwiftUI
 
 public class MainRouter: Router {
-  
   override func view(view: AppView, route: Route) -> AnyView {
     AnyView(
       buildView(view: view, route: route)

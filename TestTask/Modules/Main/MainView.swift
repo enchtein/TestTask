@@ -13,7 +13,7 @@ struct MainView: View {
   
   @State private var selectedTab: TabType = TabType.users
   @StateObject private var router: MainRouter
-  @StateObject private var sharedData: SharedData// = SharedData()
+  @StateObject private var sharedData: SharedData
   
   @EnvironmentObject private var orientationInfo: OrientationInfo
   @EnvironmentObject private var networkMonitor: NetworkMonitor

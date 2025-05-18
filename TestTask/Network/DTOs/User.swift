@@ -21,7 +21,7 @@ struct User: Codable, Equatable, Hashable {
 
 //MARK: - Mock's
 extension User {
-  static var mock: User = User.init(id: 26148, name: "tero", email: "tero@gmail.com", phone: "+380456789876", position: "Content manager", positionID: 2, registrationTimestamp: 1747391828, photo: "https://frontend-test-assignment-api.abz.agency/images/users/68271554474cd26148.jpg")
+  static var mock: User = User(id: 26148, name: "tero", email: "tero@gmail.com", phone: "+380456789876", position: "Content manager", positionID: 2, registrationTimestamp: 1747391828, photo: "https://frontend-test-assignment-api.abz.agency/images/users/68271554474cd26148.jpg")
 }
 
 //MARK: - CodingKeys

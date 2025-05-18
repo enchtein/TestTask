@@ -14,7 +14,7 @@ struct ImagePickerView: UIViewControllerRepresentable {
   @Environment(\.presentationMode) var presentationMode
   let selectedSourceType: UIImagePickerController.SourceType
   
-  class Coordinator: NSObject, UINavigationControllerDelegate, UIImagePickerControllerDelegate {
+  final class Coordinator: NSObject, UINavigationControllerDelegate, UIImagePickerControllerDelegate {
     let parent: ImagePickerView
     
     init(_ parent: ImagePickerView) {

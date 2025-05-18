@@ -19,7 +19,7 @@ struct UsersView: View {
   
   init(router: MainRouter, sharedData: SharedData) {
     self.router = router
-    _viewModel = StateObject.init(wrappedValue: UsersViewModel(sharedData))
+    _viewModel = StateObject(wrappedValue: UsersViewModel(sharedData))
   }
   
   var body: some View {

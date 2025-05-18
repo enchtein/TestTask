@@ -19,5 +19,5 @@ struct Position: Codable, Equatable, Hashable {
 
 //MARK: - Mock's
 extension Position {
-  static let mock = Position.init(id: 1, name: "Content manager")
+  static let mock = Position(id: 1, name: "Content manager")
 }

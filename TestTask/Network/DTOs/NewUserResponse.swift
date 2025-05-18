@@ -14,5 +14,5 @@ struct NewUserResponse: Codable {
 
 //MARK: - Mock
 extension NewUserResponse {
-  static let mockSuccess = NewUserResponse.init(success: true, user_id: 26187, message: "New user successfully registered", fails: nil)
+  static let mockSuccess = NewUserResponse(success: true, user_id: 26187, message: "New user successfully registered", fails: nil)
 }

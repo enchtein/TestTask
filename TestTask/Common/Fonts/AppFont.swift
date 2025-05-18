@@ -32,8 +32,3 @@ struct AppFont {
     return .custom(type.fullName, size: size)
   }
 }
-//extension Font {
-//  static func nutino(_ type: FontType = .regular, size: CGFloat = 16.0) -> Font {
-//    return .custom(type.fullName, size: size)
-//  }
-//}

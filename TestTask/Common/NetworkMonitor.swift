@@ -8,7 +8,7 @@
 import Network
 import Combine
 
-class NetworkMonitor: ObservableObject {
+final class NetworkMonitor: ObservableObject {
   static let shared = NetworkMonitor()
   @Published var isConnected: Bool = true
   
