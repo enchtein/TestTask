@@ -98,7 +98,7 @@ private extension UsersViewModel {
     userListInfo = newUserListInfo
     
     let allUsers = newUserListInfo.map { $0.users }.reduce([], +)
-    users = allUsers
+    users = allUsers.sorted { $0.registrationTimestamp > $1.registrationTimestamp }
   }
 }
 //MARK: - Subscribers + Helpers
