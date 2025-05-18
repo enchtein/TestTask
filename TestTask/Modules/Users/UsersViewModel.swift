@@ -14,7 +14,7 @@ final class UsersViewModel: ObservableObject {
   
   private var cancellables: Set<AnyCancellable> = []
   
-  private let maxCountOfUsersOnPage: Int = 10
+  private let maxCountOfUsersOnPage: Int = 6
   @Published private(set) var loadingState: LoadingState = .idle
   
   private var lastUserListInfo: UserListDTO? { userListInfo.last }
