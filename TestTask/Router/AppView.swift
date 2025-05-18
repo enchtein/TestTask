@@ -10,6 +10,7 @@ import SwiftUI
 enum AppView {
   case main
   case noInternet(error: Error, _ action: () -> Void)
+  case createUserResult(responce: NewUserResponse, _ action: () -> Void)
 }
 
 extension AppView: Identifiable {

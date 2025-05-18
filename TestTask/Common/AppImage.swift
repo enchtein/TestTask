@@ -20,5 +20,11 @@ enum AppImage {
   enum Users {
     static let noUsers = Image(.noUsers)
   }
+  
+  enum CreationUserResult {
+    static let userSuccessCreation = Image(.userSuccessCreation)
+    static let userFailreCreation = Image(.userFailreCreation)
+    static let close = Image(.close)
+  }
 }
 

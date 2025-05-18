@@ -17,7 +17,7 @@ class CreateUserViewModel: ObservableObject {
   
   @Published private(set) var nameObj = CreateUserTextFieldObj.init(type: .name)
   @Published private(set) var emailObj = CreateUserTextFieldObj.init(type: .email)
-  @Published private(set) var phoneObj = CreateUserTextFieldObj.init(type: .phone)
+  @Published private(set) var phoneObj = CreateUserPhoneTextFieldObj.init(type: .phone)
   
   @Published private(set) var avatarObj = CreateUserPhoneObject.init(type: .avatar)
   
@@ -25,6 +25,8 @@ class CreateUserViewModel: ObservableObject {
   
   @Published var selectedPostion: Position?
   @Published private(set) var positions = [Position]()
+  
+  private var lastOperation: LastTaskOperation?
   
   init(_ sharedData: SharedData) {
     self.sharedData = sharedData
@@ -41,11 +43,12 @@ class CreateUserViewModel: ObservableObject {
     CreateUserFieldType.allCases.forEach { checkErrors(for: $0) }
     
     guard signUpAvailability else { return }
-    let newUserInfo = NewUserDTO(name: nameObj.text, email: emailObj.text, phone: getReadyToSendPhoneNumber(), position_id: selectedPostion?.id, photo: avatarObj.selectedImageInfo?.toDTO)
+    let newUserInfo = NewUserDTO(name: nameObj.text, email: emailObj.text, phone: phoneObj.getReadyToSendPhoneNumber(), position_id: selectedPostion?.id, photo: avatarObj.selectedImageInfo?.toDTO)
     
     guard let newUserInfo else { return }
     register(newUser: newUserInfo)
   }
+  
   func resetErroredStateIfNeeded() {
     switch loadingState {
     case .error(_):
@@ -60,10 +63,25 @@ class CreateUserViewModel: ObservableObject {
     default: break
     }
   }
+  
+  func createionUserResultAction() {
+    loadingState = .idle
+  }
+  func repeatLastOperation() {
+    switch lastOperation {
+    case .fetchingPositions:
+      fetchPositions()
+    case .userCreation:
+      signUpAction()
+    case nil: break
+    }
+    
+    lastOperation = nil
+  }
 }
 
 //MARK: - Network layer
-extension CreateUserViewModel {
+private extension CreateUserViewModel {
   func fetchPositions() {
     loadingState = .loading
     
@@ -75,6 +93,8 @@ extension CreateUserViewModel {
         
         loadingState = .success
       } catch {
+        lastOperation = .fetchingPositions
+        
         if !NetworkMonitor.shared.isConnected {
           loadingState = .error(ErrorProcessing.noInterner)
         } else {
@@ -84,11 +104,12 @@ extension CreateUserViewModel {
     }
   }
   
-  private func register(newUser: NewUserDTO) {
+  func register(newUser: NewUserDTO) {
+    loadingState = .loading
+    
     Task {
       do {
         let token = try await NetworkAdapter.fetchToken()
-        
         let responce = try await NetworkAdapter.create(newUser, with: token.token)
         
         if responce.success {
@@ -100,9 +121,15 @@ extension CreateUserViewModel {
         }
         
         //show modal view
-        print(token)
+        loadingState = .userCreationResult(responce)
       } catch {
-        debugPrint(error.localizedDescription)
+        lastOperation = .userCreation
+        
+        if !NetworkMonitor.shared.isConnected {
+          loadingState = .error(ErrorProcessing.noInterner)
+        } else {
+          loadingState = .error(error)
+        }
       }
     }
   }
@@ -111,10 +138,9 @@ extension CreateUserViewModel {
 //MARK: - Helpers
 private extension CreateUserViewModel {
   func resetToDefaultFields() {
-    nameObj = CreateUserTextFieldObj.init(type: .name)
-    emailObj = CreateUserTextFieldObj.init(type: .email)
-    phoneObj = CreateUserTextFieldObj.init(type: .phone)
-    avatarObj = CreateUserPhoneObject.init(type: .avatar)
+    [nameObj, emailObj, phoneObj, avatarObj].forEach {
+      $0.restoreToDefault()
+    }
     selectedPostion = positions.first
   }
   
@@ -128,7 +154,7 @@ private extension CreateUserViewModel {
       emailObj.isErrored = !isValidEmail(emailObj.text)
     case .phone:
       phoneObj.isEmptyValue = phoneObj.text.isEmpty
-      phoneObj.isErrored = !isValidPhoneNumber(getClearPhoneNumber())
+      phoneObj.isErrored = !isValidPhoneNumber(phoneObj.getClearPhoneNumber())
     case .avatar:
       avatarObj.isEmptyValue = avatarObj.selectedImageInfo == nil
       avatarObj.isErrored = avatarObj.selectedImageInfo == nil
@@ -145,28 +171,6 @@ private extension CreateUserViewModel {
     let regEx = "[0-9]{10}"
     let phoneCheck = NSPredicate(format: "SELF MATCHES[c] %@", regEx)
     return phoneCheck.evaluate(with: number)
-  }
-  func getClearPhoneNumber() -> String {
-    let currentText = phoneObj.text
-    
-    let firstSubStr = "+38 ("
-    let secondSubStr = ") "
-    let thirdSubStr = " - "
-    let firstStage = currentText.replacingOccurrences(of: firstSubStr, with: "")
-    let secondStage = firstStage.replacingOccurrences(of: secondSubStr, with: "")
-    let thirdStage = secondStage.replacingOccurrences(of: thirdSubStr, with: "")
-    
-    return thirdStage
-  }
-  func getReadyToSendPhoneNumber() -> String {
-    let currentText = phoneObj.text
-    
-    let firstStage = currentText.replacingOccurrences(of: "(", with: "")
-    let secondStage = firstStage.replacingOccurrences(of: ")", with: "")
-    let thirdStage = secondStage.replacingOccurrences(of: " ", with: "")
-    let fourghtStage = thirdStage.replacingOccurrences(of: "-", with: "")
-    
-    return fourghtStage
   }
 }
 //MARK: - Subscribers + Helpers
@@ -188,51 +192,30 @@ private extension CreateUserViewModel {
     phoneObj.$text
       .receive(on: RunLoop.main)
       .sink { [weak self] _ in
-        self?.updatePhoneNumberTextIfNeeded()
         self?.updateSignUpAvailability()
+      }
+      .store(in: &cancellables)
+    $loadingState
+      .receive(on: RunLoop.main)
+      .sink { [weak self] _ in
+        self?.updateSignUpAvailabilityAccordingLoadingState()
       }
       .store(in: &cancellables)
   }
   
+  func updateSignUpAvailabilityAccordingLoadingState() {
+    if loadingState == .loading {
+      signUpAvailability = false
+    } else {
+      updateSignUpAvailability()
+    }
+  }
   func updateSignUpAvailability() {
     signUpAvailability = !emailObj.text.isEmpty
   }
-  
-  func updatePhoneNumberTextIfNeeded() {
-    let firstSubStr = "+38 ("
-    let secondSubStr = ") "
-    let thirdSubStr = " - "
-    
-    let clearPhoneNumber = getClearPhoneNumber()
-    
-    let firstPart = String(clearPhoneNumber.prefix(3))
-    let firstStage = clearPhoneNumber.dropFirst(3)
-    
-    let secondPart = String(firstStage.prefix(3))
-    let secondStage = firstStage.dropFirst(3)
-    
-    let thirdPart = String(secondStage.prefix(2))
-    let thirdStage = secondStage.dropFirst(2)
-    
-    let fourghtPart = String(thirdStage.prefix(2))
-    
-    var maskedPhoneNumber: String = ""
-    if !firstPart.isEmpty {
-      maskedPhoneNumber = firstSubStr + firstPart
-    }
-    if !secondPart.isEmpty {
-      maskedPhoneNumber += secondSubStr + secondPart
-    }
-    if !thirdPart.isEmpty {
-      maskedPhoneNumber += thirdSubStr + thirdPart
-    }
-    if !fourghtPart.isEmpty {
-      maskedPhoneNumber += thirdSubStr + fourghtPart
-    }
-    
-    guard !phoneObj.text.elementsEqual(maskedPhoneNumber) else { return }
-    phoneObj.isErrored = false
-    
-    phoneObj.text = maskedPhoneNumber
-  }
+}
+
+enum LastTaskOperation {
+  case fetchingPositions
+  case userCreation
 }

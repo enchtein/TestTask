@@ -10,6 +10,7 @@ enum LoadingState: Equatable {
   case loading
   case success
   case error(Error)
+  case userCreationResult(NewUserResponse)
   
   private var descriptionText: String {
     switch self {
@@ -17,6 +18,7 @@ enum LoadingState: Equatable {
     case .loading: "loading"
     case .success: "success"
     case .error(let error): error.localizedDescription
+    case .userCreationResult(let responce): responce.message
     }
   }
   

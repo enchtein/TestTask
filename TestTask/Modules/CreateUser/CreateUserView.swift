@@ -41,11 +41,18 @@ struct CreateUserView: View {
       switch newValue {
       case .error(let error):
         let action = { [weak viewModel, weak router] in
-          viewModel?.fetchPositions()
+          viewModel?.repeatLastOperation()
           router?.dismiss()
         }
         router.presentFullScreen(.noInternet(error: error, action))
         
+      case .userCreationResult(let responce):
+        let action = { [weak viewModel, weak router] in
+          viewModel?.createionUserResultAction()
+          router?.dismiss()
+        }
+
+        router.presentFullScreen(.createUserResult(responce: responce, action))
       default: break
       }
     }

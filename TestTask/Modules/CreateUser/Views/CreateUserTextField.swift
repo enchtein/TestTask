@@ -17,7 +17,6 @@ struct CreateUserTextField: View {
   @FocusState private var isFocused: Bool
   
   //---> internal properties
-  @State private var tfText: String = ""
   private var currentHelpersColor: Color {
     itemObj.isErrored ? constants.invalidColor : constants.placeholderOrBorderColor
   }
@@ -26,9 +25,6 @@ struct CreateUserTextField: View {
   init(itemObj: CreateUserTextFieldObj, hIndent: CGFloat) {
     self.itemObj = itemObj
     self.hIndent = hIndent
-    
-    isFocused = .init(itemObj.isFocused)
-    _tfText = .init(initialValue: itemObj.text)
   }
   
   var body: some View {
@@ -36,7 +32,7 @@ struct CreateUserTextField: View {
       Color.clear
         .contentShape(Rectangle())
         .onTapGesture {
-          itemObj.isFocused = true
+          isFocused = true
         }
       
       VStack(alignment: .leading, spacing: .zero) {
@@ -49,16 +45,6 @@ struct CreateUserTextField: View {
       }
       .padding(.horizontal, hIndent)
       .animation(.easeInOut, value: itemObj.isErrored)
-    }
-    .onChange(of: itemObj.isFocused) { newValue in
-      if isFocused != newValue {
-        isFocused = newValue
-      }
-    }
-    .onChange(of: isFocused) { newValue in
-      if itemObj.isFocused != newValue {
-        itemObj.isFocused = newValue
-      }
     }
   }
 }
@@ -75,7 +61,7 @@ private extension CreateUserTextField {
   }
   
   var textField: some View {
-    TextField("", text: $tfText)
+    TextField("", text: $itemObj.text)
       .keyboardType(itemObj.type.kbType)
       .textInputAutocapitalization(itemObj.type.autocapitalizationType)
       .font(constants.font)
@@ -85,15 +71,8 @@ private extension CreateUserTextField {
           .font(constants.font)
           .foregroundColor(currentHelpersColor)
       }
-      .onChange(of: tfText) { newValue in
-        if itemObj.text != newValue {
-          itemObj.text = newValue
-        }
-      }
-      .onChange(of: itemObj.text) { newValue in
-        if tfText != newValue {
-          tfText = newValue
-        }
+      .onChange(of: itemObj.text) { _ in
+        itemObj.setFormatedTextIfNeeded()
       }
   }
 }

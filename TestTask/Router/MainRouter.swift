@@ -39,6 +39,8 @@ extension MainRouter {
     switch view {
     case .noInternet(let error, let action):
       NoInternetView(error: error, action: action)
+    case .createUserResult(let responce, let action):
+      CreationUserResult(responce: responce, action: action)
     default:
       EmptyView()
     }
