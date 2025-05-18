@@ -9,7 +9,7 @@ import SwiftUI
 import PhotosUI
 
 struct ImagePickerView: UIViewControllerRepresentable {
-  @Binding var image: UIImage?
+  @Binding var image: NewUserAttachmentImageInfo?
   @State var imageAction: Bool = false
   @Environment(\.presentationMode) var presentationMode
   let selectedSourceType: UIImagePickerController.SourceType
@@ -23,7 +23,7 @@ struct ImagePickerView: UIViewControllerRepresentable {
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]) {
       if let selectedImage = info[.originalImage] as? UIImage {
-        parent.image = selectedImage.fixOrientation()
+        parent.image = NewUserAttachmentImageInfo(image: selectedImage, fileURL: info[.imageURL] as? URL)
       }
       parent.presentationMode.wrappedValue.dismiss()
     }

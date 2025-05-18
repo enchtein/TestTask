@@ -56,10 +56,10 @@ struct CreateUserAvatarField: View {
     .sheet(item: $showMenuItem) { result in
       switch result {
       case .gallery:
-        ImagePickerView(image: $itemObj.selectedImage, selectedSourceType: .photoLibrary)
+        ImagePickerView(image: $itemObj.selectedImageInfo, selectedSourceType: .photoLibrary)
           .edgesIgnoringSafeArea(.all)
       case .camera:
-        ImagePickerView(image: $itemObj.selectedImage, selectedSourceType: .camera)
+        ImagePickerView(image: $itemObj.selectedImageInfo, selectedSourceType: .camera)
           .edgesIgnoringSafeArea(.all)
       }
     }
@@ -69,7 +69,7 @@ struct CreateUserAvatarField: View {
 //MARK: - UI elements creating
 private extension CreateUserAvatarField {
   var isImageExist: Bool {
-    itemObj.selectedImage != nil
+    itemObj.selectedImageInfo != nil
   }
   var uploadTextMsg: String {
     if let selectedImageName = itemObj.selectedImageName {
@@ -88,8 +88,8 @@ private extension CreateUserAvatarField {
   
   var imageAndTextHStack: some View {
     HStack(alignment: .center, spacing: hIndent / 2) {
-      if isImageExist {
-        Image(uiImage: itemObj.selectedImage!)
+      if let image = itemObj.selectedImageInfo?.image {
+        Image(uiImage: image)
           .resizable()
           .aspectRatio(contentMode: .fit)
           .padding(.vertical, hIndent / 2)
@@ -97,11 +97,12 @@ private extension CreateUserAvatarField {
       
       uploadText
     }
-    .animation(.easeInOut, value: itemObj.selectedImage)
+    .animation(.easeInOut, value: itemObj.selectedImageInfo?.image)
   }
   
   var uploadButton: some View {
     Button {
+      UIApplication.shared.hideKeyboard()
       showMenu.toggle()
     } label: {
       Text("Upload")

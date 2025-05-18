@@ -77,6 +77,7 @@ private extension CreateUserTextField {
   var textField: some View {
     TextField("", text: $tfText)
       .keyboardType(itemObj.type.kbType)
+      .textInputAutocapitalization(itemObj.type.autocapitalizationType)
       .font(constants.font)
       .foregroundStyle(constants.textColor)
       .placeholder(when: itemObj.text.isEmpty) {

@@ -35,7 +35,12 @@ class CreateUserViewModel: ObservableObject {
   
   func signUpAction() {
     CreateUserFieldType.allCases.forEach { checkErrors(for: $0) }
-    print("create user action")
+    
+    guard signUpAvailability else { return }
+    let newUserInfo = NewUserDTO(name: nameObj.text, email: emailObj.text, phone: getReadyToSendPhoneNumber(), position_id: selectedPostion?.id, photo: avatarObj.selectedImageInfo?.toDTO)
+    
+    guard let newUserInfo else { return }
+    register(newUser: newUserInfo)
   }
   func resetErroredStateIfNeeded() {
     switch loadingState {
@@ -74,10 +79,40 @@ extension CreateUserViewModel {
       }
     }
   }
+  
+  private func register(newUser: NewUserDTO) {
+    Task {
+      do {
+        let token = try await NetworkAdapter.fetchToken()
+        
+        let responce = try await NetworkAdapter.create(newUser, with: token.token)
+        
+        if responce.success {
+          //reset fields (prepair to new registration)
+          resetToDefaultFields()
+          
+          //add to sharedData for showing in UserList
+        }
+        
+        //show modal view
+        print(token)
+      } catch {
+        debugPrint(error.localizedDescription)
+      }
+    }
+  }
 }
 
 //MARK: - Helpers
 private extension CreateUserViewModel {
+  func resetToDefaultFields() {
+    nameObj = CreateUserTextFieldObj.init(type: .name)
+    emailObj = CreateUserTextFieldObj.init(type: .email)
+    phoneObj = CreateUserTextFieldObj.init(type: .phone)
+    avatarObj = CreateUserPhoneObject.init(type: .avatar)
+    selectedPostion = positions.first
+  }
+  
   func checkErrors(for type: CreateUserFieldType) {
     switch type {
     case .name:
@@ -90,21 +125,21 @@ private extension CreateUserViewModel {
       phoneObj.isEmptyValue = phoneObj.text.isEmpty
       phoneObj.isErrored = !isValidPhoneNumber(getClearPhoneNumber())
     case .avatar:
-      avatarObj.isEmptyValue = avatarObj.selectedImage == nil
-      avatarObj.isErrored = avatarObj.selectedImage == nil
+      avatarObj.isEmptyValue = avatarObj.selectedImageInfo == nil
+      avatarObj.isErrored = avatarObj.selectedImageInfo == nil
     }
   }
   
   func isValidEmail(_ email: String) -> Bool {
-      let emailRegex = #"^\+38 \(\d{3}\) \d{3} - \d{2} - \d{2}$"#
-      let emailPredicate = NSPredicate(format: "SELF MATCHES[c] %@", emailRegex)
-      return emailPredicate.evaluate(with: email)
+    let emailRegex = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,64}"
+    let emailPredicate = NSPredicate(format: "SELF MATCHES[c] %@", emailRegex)
+    return emailPredicate.evaluate(with: email)
   }
   
   func isValidPhoneNumber(_ number: String) -> Bool {
     let regEx = "[0-9]{10}"
-      let phoneCheck = NSPredicate(format: "SELF MATCHES[c] %@", regEx)
-      return phoneCheck.evaluate(with: number)
+    let phoneCheck = NSPredicate(format: "SELF MATCHES[c] %@", regEx)
+    return phoneCheck.evaluate(with: number)
   }
   func getClearPhoneNumber() -> String {
     let currentText = phoneObj.text
@@ -117,6 +152,16 @@ private extension CreateUserViewModel {
     let thirdStage = secondStage.replacingOccurrences(of: thirdSubStr, with: "")
     
     return thirdStage
+  }
+  func getReadyToSendPhoneNumber() -> String {
+    let currentText = phoneObj.text
+    
+    let firstStage = currentText.replacingOccurrences(of: "(", with: "")
+    let secondStage = firstStage.replacingOccurrences(of: ")", with: "")
+    let thirdStage = secondStage.replacingOccurrences(of: " ", with: "")
+    let fourghtStage = thirdStage.replacingOccurrences(of: "-", with: "")
+    
+    return fourghtStage
   }
 }
 //MARK: - Subscribers + Helpers

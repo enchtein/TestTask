@@ -19,4 +19,11 @@ struct NetworkAdapter {
   static func fetchPositions() async throws -> PositionsList {
     try await provider.request(.getPositionsList)
   }
+  
+  static func fetchToken() async throws -> TokenDTO {
+    try await provider.request(.getToken)
+  }
+  static func create(_ newUser: NewUserDTO, with token: String) async throws -> NewUserResponse {
+    try await provider.request(.create(newUser, token: token))
+  }
 }
