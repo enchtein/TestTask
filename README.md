@@ -36,4 +36,8 @@ CreationUserResult - showing text of success user creation or server message
 ## Additionaly:
 All app contains smooth animations.  
 Add logic for sizing font and spacing indent for different devices (iPhone / iPad).  
-User Combine for get subscribers on changes and provide additional changes like set text by phone mask (+38 (XXX) XXX - XX - XX) at CreateUserView phone field.
+User Combine for get subscribers on changes and provide additional changes like set text by phone mask (+38 (XXX) XXX - XX - XX) at CreateUserView phone field.  
+
+
+## Link on Media:  
+https://drive.google.com/drive/folders/1-fZkFzGYk0J10VEDbtkjYu3-Grheosk1?usp=sharing
