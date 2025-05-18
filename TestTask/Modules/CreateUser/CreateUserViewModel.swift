@@ -10,6 +10,8 @@ import Combine
 
 @MainActor
 class CreateUserViewModel: ObservableObject {
+  @ObservedObject private(set) var sharedData: SharedData
+  
   private var cancellables: Set<AnyCancellable> = []
   @Published private(set) var loadingState: LoadingState = .idle
   
@@ -24,7 +26,9 @@ class CreateUserViewModel: ObservableObject {
   @Published var selectedPostion: Position?
   @Published private(set) var positions = [Position]()
   
-  init() {
+  init(_ sharedData: SharedData) {
+    self.sharedData = sharedData
+    
     fetchPositions()
     subscribeForChanges() //Call once on init
     print("CreateUserViewModel init")
@@ -92,6 +96,7 @@ extension CreateUserViewModel {
           resetToDefaultFields()
           
           //add to sharedData for showing in UserList
+          sharedData.isReloadNeeded = true
         }
         
         //show modal view

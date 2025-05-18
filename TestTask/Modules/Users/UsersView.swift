@@ -17,9 +17,9 @@ struct UsersView: View {
   
   @State private var isOnScreen: Bool = false
   
-  init(router: MainRouter) {
+  init(router: MainRouter, sharedData: SharedData) {
     self.router = router
-    _viewModel = StateObject.init(wrappedValue: UsersViewModel())
+    _viewModel = StateObject.init(wrappedValue: UsersViewModel(sharedData))
   }
   
   var body: some View {
@@ -108,7 +108,7 @@ private extension UsersView {
 
 //MARK: - Preview
 #Preview {
-  UsersView(router: .default)
+  UsersView(router: .default, sharedData: .init())
     .environmentObject(OrientationInfo.phone)
     .environmentObject(NetworkMonitor.shared)
 }

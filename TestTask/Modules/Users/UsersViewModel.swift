@@ -6,9 +6,14 @@
 //
 
 import SwiftUI
+import Combine
 
 @MainActor
 final class UsersViewModel: ObservableObject {
+  @ObservedObject private(set) var sharedData: SharedData
+  
+  private var cancellables: Set<AnyCancellable> = []
+  
   private let maxCountOfUsersOnPage: Int = 10
   @Published private(set) var loadingState: LoadingState = .idle
   
@@ -17,8 +22,11 @@ final class UsersViewModel: ObservableObject {
   private(set) var userListInfo = [UserListDTO]()
   @Published private(set) var users = [User]()
   
-  init() {
+  init(_ sharedData: SharedData) {
+    self.sharedData = sharedData
+    
     fetchUsersIfNeeded()
+    subscribeForChanges() //Call once on init
     print("UsersViewModel init")
   }
   deinit {
@@ -91,5 +99,29 @@ private extension UsersViewModel {
     
     let allUsers = newUserListInfo.map { $0.users }.reduce([], +)
     users = allUsers
+  }
+}
+//MARK: - Subscribers + Helpers
+private extension UsersViewModel {
+  func subscribeForChanges() {
+    sharedData.$isReloadNeeded
+      .receive(on: RunLoop.main)
+      .sink { [weak self] _ in
+        self?.resetExistListInfoAndReload()
+      }
+      .store(in: &cancellables)
+  }
+  
+  func resetExistListInfoAndReload() {
+    guard sharedData.isReloadNeeded else { return }
+    
+    loadingState = .idle
+    userListInfo = []
+    users = []
+    //reload user list
+    fetchUsersIfNeeded()
+    
+    //call to clear sharedData
+    sharedData.resetParametersInNeeded()
   }
 }

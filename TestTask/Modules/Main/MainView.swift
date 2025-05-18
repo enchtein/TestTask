@@ -13,12 +13,14 @@ struct MainView: View {
   
   @State private var selectedTab: TabType = TabType.users
   @StateObject private var router: MainRouter
+  @StateObject private var sharedData: SharedData// = SharedData()
   
   @EnvironmentObject private var orientationInfo: OrientationInfo
   @EnvironmentObject private var networkMonitor: NetworkMonitor
   
   init(router: MainRouter) {
     _router = StateObject(wrappedValue: router)
+    _sharedData = StateObject(wrappedValue: SharedData())
   }
   
   var body: some View {
@@ -64,9 +66,9 @@ private extension MainView {
   func tabItemView(for type: TabType) -> some View {
     switch type {
     case .users:
-      UsersView(router: router)
+      UsersView(router: router, sharedData: sharedData)
     case .singUp:
-      CreateUserView(router: router)
+      CreateUserView(router: router, sharedData: sharedData)
     }
   }
   func tabItemButton(for type: TabType) -> some View {
