@@ -43,6 +43,16 @@ final class CreateUserViewModel: ObservableObject {
     CreateUserFieldType.allCases.forEach { checkErrors(for: $0) }
     
     guard signUpAvailability else { return }
+    
+    let isAllValid = [
+    !nameObj.isErrored,
+    !emailObj.isErrored,
+    !phoneObj.isErrored,
+    !avatarObj.isErrored
+    ].allSatisfy { $0 == true }
+    
+    guard isAllValid else { return }
+    
     let newUserInfo = NewUserDTO(name: nameObj.text, email: emailObj.text, phone: phoneObj.getReadyToSendPhoneNumber(), position_id: selectedPostion?.id, photo: avatarObj.selectedImageInfo?.toDTO)
     
     guard let newUserInfo else { return }
