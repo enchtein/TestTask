@@ -36,8 +36,8 @@ extension MainRouter {
   @ViewBuilder
   func buildView(view: AppView, route: Route) -> some View {
     switch view {
-    case .noInternet(let error, let action):
-      NoInternetView(error: error, action: action)
+    case .noInternet(let processor):
+      NoInternetView(errorProcessor: processor)
     case .createUserResult(let responce, let action):
       CreationUserResult(responce: responce, action: action)
     default:

@@ -11,8 +11,7 @@ struct NoInternetView: View {
   @EnvironmentObject private var orientationInfo: OrientationInfo
   private var constants: Constants { Constants(orientationInfo) }
   
-  let error: Error
-  let action: () -> Void
+  let errorProcessor: ErrorProcessorProvider
   
   var body: some View {
     ZStack {
@@ -24,7 +23,7 @@ struct NoInternetView: View {
         msg
         
         CommonButton(title: "Try again", isActive: .constant(true)) {
-          action()
+          errorProcessor.processAction()
         }
       }
     }
@@ -46,17 +45,17 @@ private extension NoInternetView {
   }
   
   func errorText() -> Text {
-    if let error = error as? ErrorProcessing {
+    if let error = errorProcessor.error as? ErrorProcessing {
       Text(error.errorMsg)
     } else {
-      Text(error.localizedDescription)
+      Text(errorProcessor.error.localizedDescription)
     }
   }
 }
 
 //MARK: - Preview
 #Preview {
-  NoInternetView(error: ErrorProcessing.noInterner, action: {})
+  NoInternetView(errorProcessor: .shared)
     .environmentObject(OrientationInfo.phone)
 }
 

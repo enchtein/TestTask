@@ -11,6 +11,7 @@ struct UsersView: View {
   @ObservedObject private var router: MainRouter
   @EnvironmentObject private var orientationInfo: OrientationInfo
   @EnvironmentObject private var networkMonitor: NetworkMonitor
+  @EnvironmentObject private var errorProcessor: ErrorProcessorProvider
   
   private var constants: Constants { Constants(orientationInfo) }
   @StateObject private var viewModel: UsersViewModel
@@ -29,12 +30,9 @@ struct UsersView: View {
         guard isOnScreen else { return }
         switch newValue {
         case .error(let error):
-          let action = { [weak viewModel, weak router] in
+          errorProcessor.presentError(from: router, with: error) { [weak viewModel] in
             viewModel?.fetchUsersIfNeeded()
-            router?.dismiss()
           }
-          router.presentFullScreen(.noInternet(error: error, action))
-          
         default: break
         }
       }

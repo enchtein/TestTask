@@ -9,7 +9,7 @@ import SwiftUI
 
 enum AppView {
   case main
-  case noInternet(error: Error, _ action: () -> Void)
+  case noInternet(_ errorProcessor: ErrorProcessorProvider)
   case createUserResult(responce: NewUserResponse, _ action: () -> Void)
 }
 
