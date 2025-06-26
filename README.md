@@ -1,4 +1,4 @@
-# TestTask
+# Register Form
 
 ## Dependencies and any external libraries used:
 1) Moya for network layer
